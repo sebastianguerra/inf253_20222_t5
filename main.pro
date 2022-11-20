@@ -1,5 +1,8 @@
 % 1. Posiciones pares e impares
-% Debe implementar el predicado sepparimpar(L, P, I) tal que L, P e I sean listas, y P contenga todos los elementos en las posiciones pares de L e I todos los de las posiciones impares (Se consideran que las listas parten desde 0).
+% Debe implementar el predicado sepparimpar(L, P, I) tal que L, P e I sean
+% listas, y P contenga todos los elementos en las posiciones pares de L e I
+% todos los de las posiciones impares (Se consideran que las listas parten
+% desde 0).
 %
 % ?- sepparimpar([1, 5, 3, 2, 4, 6], P, I).
 % P= [1, 3, 4], I = [5, 2, 6]
@@ -9,14 +12,16 @@
 
 sepparimpar([], [], []).
 sepparimpar([B], [B], []).
-sepparimpar([A|LT], [A|PT], I) :- sepparimpar(LT, I, PT).
+sepparimpar([A | LT], [A | PT], I) :- sepparimpar(LT, I, PT).
 
 
 
 
 
 % 2. Todos los numeros en un rango
-% Debe implementar el predicado todosrango(L, Min, Max) tal que L sea una lista que contenga todos los numeros enteros en el intervalo [Min, Max) (La lista puede contener mas numeros).
+% Debe implementar el predicado todosrango(L, Min, Max) tal que L sea una lista
+% que contenga todos los numeros enteros en el intervalo [Min, Max) (La lista
+% puede contener mas numeros).
 %
 % ?- todosrango([1, 5, 3, 2, 4, 6], 3, 7).
 % true
@@ -32,9 +37,9 @@ sepparimpar([A|LT], [A|PT], I) :- sepparimpar(LT, I, PT).
 todosrango(L, A, B) :-
     member(A, L), 
     (
-        B is A+1;
+        B is A + 1;
 
-        A1 is A+1, 
+        A1 is A + 1, 
         todosrango(L, A1, B)
     ).
 
@@ -43,7 +48,9 @@ todosrango(L, A, B) :-
 
 
 % 3. Rango maximo
-% Debe implementar el predicado rangomax(L, Min, Max) tal que L sea una lista y el intervalo [Min, Max) es el mas grande posible, para el cual se cumple que todos los enteros en este se encuentren en la lista.
+% Debe implementar el predicado rangomax(L, Min, Max) tal que L sea una lista y
+% el intervalo [Min, Max) es el mas grande posible, para el cual se cumple que
+% todos los enteros en este se encuentren en la lista.
 %
 % ?- rangomax([1, 5, 3, 2, 4, 6], 1, 7).
 % true
@@ -56,25 +63,32 @@ todosrango(L, A, B) :-
 
 c_rangos_lista([], []).
 c_rangos_lista([_], [1]).
-c_rangos_lista([La, Lb|Lt], [Rh|Rt]) :-
-    sort([La, Lb|Lt], [La, Lb|Lt]),
-    La is Lb - 1,
-    c_rangos_lista([Lb|Lt], [V1|Rt]),
-    Rh is V1 + 1;
+c_rangos_lista([La, Lb | Lt], [Rh | Rt]) :-
+    % if
+    sort([La, Lb | Lt], [La, Lb | Lt])
+        % then
+        -> (
+            % if
+            La is Lb - 1
+                % then
+                -> (
+                    c_rangos_lista([Lb | Lt], [V1 | Rt]),
+                    Rh is V1 + 1
+                );
+                % else        
+                Rh is 1,
+                c_rangos_lista([Lb | Lt], Rt)
+        );
+        % else
+        sort([La, Lb | Lt], L2),
+        c_rangos_lista(L2, [Rh | Rt]).
 
-    not(sort([La, Lb|Lt], [La, Lb|Lt])),
-    sort([La, Lb|Lt], L2),
-    c_rangos_lista(L2, [Rh|Rt]);
-
-    sort([La, Lb|Lt], [La, Lb|Lt]),
-    not(La is Lb - 1),
-    Rh is 1,
-    c_rangos_lista([Lb|Lt], Rt).
 
 
 rangomax(L, A, B) :- 
     todosrango(L, A, B), 
-    A2 is A-1, B2 is B+1, 
+
+    A2 is A - 1, B2 is B + 1, 
     not(todosrango(L, A2, B)), 
     not(todosrango(L, A, B2)),
 
@@ -87,7 +101,10 @@ rangomax(L, A, B) :-
 
 
 % 4. Chico Grande Chico Grande
-% Debe implementar el predicado chicograndechico(L, Min, Max) tal que L es una lista de largo Max-Min en donde todos sus elementos en posiciones pares estan en el intervalo [Min, (Max+Min)/2] y todos sus elementos en posiciones impares estan en el intervalo ((Max+min)/2, Max).
+% Debe implementar el predicado chicograndechico(L, Min, Max) tal que L es una
+% lista de largo Max-Min en donde todos sus elementos en posiciones pares estan
+% en el intervalo [Min, (Max+Min)/2] y todos sus elementos en posiciones
+% impares estan en el intervalo ((Max+min)/2, Max).
 %
 % ?- chicograndechico(L, 1, 5).
 % L = [1, 3, 2, 4]
@@ -110,10 +127,10 @@ rangomax(L, A, B) :-
 % L = [3, 5, 2, 4, 1]
 
 alllessthan([], _).
-alllessthan([A|LT], B) :- A < B, alllessthan(LT, B).
+alllessthan([A | LT], B) :- A < B, alllessthan(LT, B).
 
 allgreaterorequalthan([], _).
-allgreaterorequalthan([A|LT], B) :- A >= B, allgreaterorequalthan(LT, B).
+allgreaterorequalthan([A | LT], B) :- A >= B, allgreaterorequalthan(LT, B).
 
 chicograndechico(L, Min, Max) :-
     rangomax(L, Min, Max),
@@ -122,7 +139,7 @@ chicograndechico(L, Min, Max) :-
 
     sepparimpar(L, L1, L2),
 
-    H is (Max+Min)/2,
+    H is (Max + Min) / 2,
 
     alllessthan(L1, H),
     allgreaterorequalthan(L2, H).

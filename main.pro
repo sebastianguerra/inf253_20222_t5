@@ -48,35 +48,6 @@ todosrango(L, A, B) :- member(A, L), A1 is A+1, todosrango(L, A1, B).
 % ?- rangomax([1, 5, 3, 2, 4, 6], X, Y).
 % X = 1, Y = 7
 
-
-list_max([P|T], O) :- list_max(T, P, O).
-
-list_max([], P, P).
-list_max([H|T], P, O) :-
-    (    H > P
-    ->   list_max(T, H, O)
-    ;    list_max(T, P, O)).
-
-
-list_min([P|T], O) :- list_min(T, P, O).
-list_min([P|T], O) :- list_min(T, P, O).
-
-list_min([], P, P).
-list_min([H|T], P, O) :-
-    (    H < P
-    ->   list_min(T, H, O)
-    ;    list_min(T, P, O)).
-
-
-% ?- c_rangos_lista([1, 5, 3, 2, 4, 6], [6]).
-% true
-%
-% ?- c_rangos_lista([1, 5, 3, 2, 4, 6], [1, 2]).
-% false
-%
-% ?- c_rangos_lista([1, 5, 2, 4, 6], [2, 3]).
-% true
-
 c_rangos_lista([], []).
 c_rangos_lista([_], [1]).
 c_rangos_lista([La, Lb|Lt], [Rh|Rt]) :-
@@ -95,7 +66,6 @@ c_rangos_lista([La, Lb|Lt], [Rh|Rt]) :-
     c_rangos_lista([Lb|Lt], Rt).
 
 
-
 rangomax(L, A, B) :- 
     todosrango(L, A, B), 
     A2 is A-1, B2 is B+1, 
@@ -103,7 +73,7 @@ rangomax(L, A, B) :-
     not(todosrango(L, A, B2)),
 
     c_rangos_lista(L, R),
-    list_max(R, R2),
+    max_list(R, R2),
     R2 is B-A.
 
 

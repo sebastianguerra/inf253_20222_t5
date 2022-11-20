@@ -29,8 +29,14 @@ sepparimpar([A|LT], [A|PT], I) :- sepparimpar(LT, I, PT).
 % ...
 % X = 6, Y = 7
 
-todosrango(L, A, B) :- member(A1, L), A is A1, B is A+1.
-todosrango(L, A, B) :- member(A, L), A1 is A+1, todosrango(L, A1, B).
+todosrango(L, A, B) :-
+    member(A, L), 
+    (
+        B is A+1;
+
+        A1 is A+1, 
+        todosrango(L, A1, B)
+    ).
 
 
 
@@ -77,3 +83,120 @@ rangomax(L, A, B) :-
     R2 is B-A.
 
 
+
+
+
+% 4. Chico Grande Chico Grande
+% Debe implementar el predicado chicograndechico(L, Min, Max) tal que L es una lista de largo Max-Min en donde todos sus elementos en posiciones pares estan en el intervalo [Min, (Max+Min)/2] y todos sus elementos en posiciones impares estan en el intervalo ((Max+min)/2, Max).
+%
+% ?- chicograndechico(L, 1, 5).
+% L = [1, 3, 2, 4]
+% L = [2, 3, 1, 4]
+% L = [1, 4, 2, 3]
+% L = [2, 4, 1, 3]
+%
+% ?- chicograndechico(L, 1, 6).
+% L = [1, 4, 2, 5, 3]
+% L = [1, 4, 3, 5, 2]
+% L = [2, 4, 1, 5, 3]
+% L = [2, 4, 3, 5, 1]
+% L = [3, 4, 1, 5, 2]
+% L = [3, 4, 2, 5, 1]
+% L = [1, 5, 2, 4, 3]
+% L = [1, 5, 3, 4, 2]
+% L = [2, 5, 1, 4, 3]
+% L = [2, 5, 3, 4, 1]
+% L = [3, 5, 1, 4, 2]
+% L = [3, 5, 2, 4, 1]
+
+alllessthan([], _).
+alllessthan([A|LT], B) :- A < B, alllessthan(LT, B).
+
+allgreaterorequalthan([], _).
+allgreaterorequalthan([A|LT], B) :- A >= B, allgreaterorequalthan(LT, B).
+
+chicograndechico(L, Min, Max) :-
+    rangomax(L, Min, Max),
+    length(L, Len),
+    Len is Max-Min,
+
+    sepparimpar(L, L1, L2),
+
+    H is (Max+Min)/2,
+
+    alllessthan(L1, H),
+    allgreaterorequalthan(L2, H).
+
+
+
+
+
+
+
+
+
+test_sepparimpar :-
+    sepparimpar([1, 5, 3, 2, 4, 6], P, I),
+    P = [1, 3, 4], I = [5, 2, 6],
+    sepparimpar(L, [1, 2, 3], [4, 5, 6]),
+    L = [1, 4, 2, 5, 3, 6].
+
+
+test_todosrango :-
+    todosrango([1, 5, 3, 2, 4, 6], 3, 7),
+
+    findall([X, Y], 
+            todosrango([1,5,3,2,4,6], X, Y), L),
+            permutation([
+                [1,2], [1,3], [1,4], [1,5], [1,6], [1,7], 
+                [2,3], [2,4], [2,5], [2,6], [2,7], 
+                [3,4], [3,5], [3,6], [3,7], 
+                [4, 5], [4, 6], [4, 7], 
+                [5, 6], [5, 7], 
+                [6, 7]], 
+                L),
+    
+    not(todosrango([1, 5, 3, 4, 6], 1, 7)),
+    not(todosrango([1, 5, 3, 2, 4, 6], 1, 8)),
+
+    length(L2, 3),
+    findall(L2, todosrango(L2, 1, 3), L3),
+    permutation(L3, [[1,2,_],[1,_,2],[2,1,_],[2,_,1],[_,1,2],[_,2,1]]).
+
+
+test_rangomax :-
+    rangomax([1, 5, 3, 2, 4, 6], 1, 7),
+
+    not(rangomax([1, 5, 3, 2, 4, 6], 3, 7)),
+    findall(
+        [X, Y], 
+        rangomax([1, 5, 3, 2, 4, 6], X, Y), 
+        L), 
+    L = [[1, 7]].
+
+
+test_chicograndechico :-
+    findall(L6, chicograndechico(L6, 1, 5), L7),
+    permutation(L7, [[1, 3, 2, 4], [2, 3, 1, 4], [1, 4, 2, 3], [2, 4, 1, 3]]),
+
+    findall(L8, chicograndechico(L8, 1, 6), L9), 
+    permutation(L9, [
+        [1, 4, 2, 5, 3], [1, 4, 3, 5, 2], [2, 4, 1, 5, 3], 
+        [2, 4, 3, 5, 1], [3, 4, 1, 5, 2], [3, 4, 2, 5, 1], 
+        [1, 5, 2, 4, 3], [1, 5, 3, 4, 2], [2, 5, 1, 4, 3], 
+        [2, 5, 3, 4, 1], [3, 5, 1, 4, 2], [3, 5, 2, 4, 1]]).
+
+
+
+test :- 
+    test_sepparimpar,
+    write('sepparimpar ok'), nl,
+
+    test_todosrango,
+    write('todosrango ok'), nl,
+
+    test_rangomax,
+    write('rangomax ok'), nl,
+
+    test_chicograndechico,
+    write('chicograndechico ok'), nl.

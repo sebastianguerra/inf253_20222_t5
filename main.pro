@@ -67,9 +67,6 @@ list_min([H|T], P, O) :-
     ->   list_min(T, H, O)
     ;    list_min(T, P, O)).
 
-list_is_sorted([]).
-list_is_sorted([_]).
-list_is_sorted([H1,H2|T]) :- H1 =< H2, list_is_sorted([H2|T]).
 
 % ?- c_rangos_lista([1, 5, 3, 2, 4, 6], [6]).
 % true
@@ -83,17 +80,18 @@ list_is_sorted([H1,H2|T]) :- H1 =< H2, list_is_sorted([H2|T]).
 c_rangos_lista([], []).
 c_rangos_lista([_], [1]).
 c_rangos_lista([La, Lb|Lt], [Rh|Rt]) :-
-    list_is_sorted([La, Lb|Lt]),
+    sort([La, Lb|Lt], [La, Lb|Lt]),
     La is Lb - 1,
     c_rangos_lista([Lb|Lt], [V1|Rt]),
     Rh is V1 + 1;
 
-    not(list_is_sorted([La, Lb|Lt])),
+    not(sort([La, Lb|Lt], [La, Lb|Lt])),
     sort([La, Lb|Lt], L2),
     c_rangos_lista(L2, [Rh|Rt]);
 
-    list_is_sorted([La, Lb|Lt]),
+    sort([La, Lb|Lt], [La, Lb|Lt]),
     not(La is Lb - 1),
+    Rh is 1,
     c_rangos_lista([Lb|Lt], Rt).
 
 

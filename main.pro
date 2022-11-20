@@ -26,16 +26,18 @@ todosrango(L, A, B) :-
 
 
 
-
+is_sorted(A) :- sort(A, A).
 
 % Debe implementar el predicado rangomax(L, Min, Max) tal que L sea una lista y
 % el intervalo [Min, Max) es el mas grande posible, para el cual se cumple que
 % todos los enteros en este se encuentren en la lista.
 c_rangos_lista([], []).
+
 c_rangos_lista([_], [1]).
+
 c_rangos_lista([La, Lb | Lt], [Rh | Rt]) :-
     (
-        sort([La, Lb | Lt], [La, Lb | Lt])
+        is_sorted([La, Lb | Lt])
     -> 
         (
             La is Lb - 1
@@ -49,8 +51,8 @@ c_rangos_lista([La, Lb | Lt], [Rh | Rt]) :-
             c_rangos_lista([Lb | Lt], Rt)
         )
     ;
-        sort([La, Lb | Lt], L2),
-        c_rangos_lista(L2, [Rh | Rt])
+        sort([La, Lb | Lt], SortedList),
+        c_rangos_lista(SortedList, [Rh | Rt])
     ).
 
 

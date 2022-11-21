@@ -116,12 +116,20 @@ chicograndechico(L, Min, Max) :-
 
 
 test_sepparimpar :-
-    sepparimpar([1, 5, 3, 2, 4, 6], P, I),
-    P = [1, 3, 4], I = [5, 2, 6],
+    sepparimpar([1, 5, 3, 2, 4, 6], P1, I1),
+    P1 = [1, 3, 4], I1 = [5, 2, 6],
+    not((
+        sepparimpar([1, 5, 3, 2, 4, 6], P2, I2),
+        P2 \= [1, 3, 4], I2 \= [5, 2, 6]
+    )),
     write("1 OK"), nl,
 
-    sepparimpar(L, [1, 2, 3], [4, 5, 6]),
-    L = [1, 4, 2, 5, 3, 6],
+    sepparimpar(L1, [1, 2, 3], [4, 5, 6]),
+    L1 = [1, 4, 2, 5, 3, 6],
+    not((
+        sepparimpar(L2, [1, 2, 3], [4, 5, 6]),
+        L2 \= [1, 4, 2, 5, 3, 6]
+    )),
     write("2 OK"), nl.
 
 
@@ -160,12 +168,16 @@ test_rangomax :-
     write("1 OK"), nl,
 
     not(rangomax([1, 5, 3, 2, 4, 6], 3, 7)),
-    findall(
-        [X, Y], 
-        rangomax([1, 5, 3, 2, 4, 6], X, Y), 
-        L), 
-    L = [[1, 7]],
-    write("2 OK"), nl.
+    write("2 OK"), nl,
+
+    rangomax([1, 5, 3, 2, 4, 6], X1, Y1),
+    X1 = 1, Y1 = 7,
+
+    not((
+        rangomax([1, 5, 3, 2, 4, 6], X2, Y2),
+        X2 \= 1, Y2 \= 7
+    )),
+    write("3 OK"), nl.
 
 
 test_chicograndechico :-
@@ -187,7 +199,7 @@ test_chicograndechico :-
 
 test :- 
     nl,
-    
+
     write("sepparimpar"), nl,
     test_sepparimpar,
     write('OK sepparimpar'), nl, nl,

@@ -12,4 +12,4 @@ Iba a eliminar los tests para mandar la tarea pero sentí que me quedaron muy bi
 
 
 
-Tampoco estaba muy seguro de cuáles parámetros podían ser variables (que se encontrara el valor con el que se hacía verdadero el predicado), así que me guié con los ejemplos del enunciado.
+Tampoco estaba muy seguro de cuáles parámetros podían ser variables (que se encontrara el valor o valores con los que se hacía verdadero el predicado), así que me guié con los ejemplos del enunciado.

@@ -90,10 +90,12 @@ allgreaterorequalthan([A | LT], B) :-
     allgreaterorequalthan(LT, B).
 
 
+
+
 chicograndechico(L, Min, Max) :-
-    rangomax(L, Min, Max),
-    length(L, Len),
     Len is Max-Min,
+    length(L, Len),
+    rangomax(L, Min, Max),
     sepparimpar(L, L1, L2),
     H is (Max + Min) / 2,
     alllessthan(L1, H),
@@ -107,18 +109,29 @@ chicograndechico(L, Min, Max) :-
 
 
 
+
+
+
+
+
+
 test_sepparimpar :-
     sepparimpar([1, 5, 3, 2, 4, 6], P, I),
     P = [1, 3, 4], I = [5, 2, 6],
+    write("1 OK"), nl,
+
     sepparimpar(L, [1, 2, 3], [4, 5, 6]),
-    L = [1, 4, 2, 5, 3, 6].
+    L = [1, 4, 2, 5, 3, 6],
+    write("2 OK"), nl.
 
 
 test_todosrango :-
     todosrango([1, 5, 3, 2, 4, 6], 3, 7),
+    write("1 OK"), nl,
 
     findall([X, Y], 
-            todosrango([1,5,3,2,4,6], X, Y), L),
+            todosrango([1,5,3,2,4,6], X, Y), L1),
+            sort(L1, L2),
             permutation([
                 [1,2], [1,3], [1,4], [1,5], [1,6], [1,7], 
                 [2,3], [2,4], [2,5], [2,6], [2,7], 
@@ -126,49 +139,67 @@ test_todosrango :-
                 [4, 5], [4, 6], [4, 7], 
                 [5, 6], [5, 7], 
                 [6, 7]], 
-                L),
+                L2),
+    write("2 OK"), nl,
     
     not(todosrango([1, 5, 3, 4, 6], 1, 7)),
-    not(todosrango([1, 5, 3, 2, 4, 6], 1, 8)),
+    write("3 OK"), nl,
 
-    length(L2, 3),
-    findall(L2, todosrango(L2, 1, 3), L3),
-    permutation(L3, [[1,2,_],[1,_,2],[2,1,_],[2,_,1],[_,1,2],[_,2,1]]).
+    not(todosrango([1, 5, 3, 2, 4, 6], 1, 8)),
+    write("4 OK"), nl,
+
+    length(L3, 3),
+    findall(L3, todosrango(L3, 1, 3), L4),
+    sort(L4, L5),
+    permutation(L5, [[1,2,_],[1,_,2],[2,1,_],[2,_,1],[_,1,2],[_,2,1]]),
+    write("5 OK"), nl.
 
 
 test_rangomax :-
     rangomax([1, 5, 3, 2, 4, 6], 1, 7),
+    write("1 OK"), nl,
 
     not(rangomax([1, 5, 3, 2, 4, 6], 3, 7)),
     findall(
         [X, Y], 
         rangomax([1, 5, 3, 2, 4, 6], X, Y), 
         L), 
-    L = [[1, 7]].
+    L = [[1, 7]],
+    write("2 OK"), nl.
 
 
 test_chicograndechico :-
-    findall(L6, chicograndechico(L6, 1, 5), L7),
-    permutation(L7, [[1, 3, 2, 4], [2, 3, 1, 4], [1, 4, 2, 3], [2, 4, 1, 3]]),
+    findall(L1, chicograndechico(L1, 1, 5), L2),
+    sort(L2, L3),
+    permutation(L3, [[1, 3, 2, 4], [2, 3, 1, 4], [1, 4, 2, 3], [2, 4, 1, 3]]),
+    write("1 OK"), nl,
 
-    findall(L8, chicograndechico(L8, 1, 6), L9), 
-    permutation(L9, [
+    findall(L4, chicograndechico(L4, 1, 6), L5), 
+    sort(L5, L6),
+    permutation(L6, [
         [1, 4, 2, 5, 3], [1, 4, 3, 5, 2], [2, 4, 1, 5, 3], 
         [2, 4, 3, 5, 1], [3, 4, 1, 5, 2], [3, 4, 2, 5, 1], 
         [1, 5, 2, 4, 3], [1, 5, 3, 4, 2], [2, 5, 1, 4, 3], 
-        [2, 5, 3, 4, 1], [3, 5, 1, 4, 2], [3, 5, 2, 4, 1]]).
+        [2, 5, 3, 4, 1], [3, 5, 1, 4, 2], [3, 5, 2, 4, 1]]),
+    write("2 OK"), nl.
 
 
 
 test :- 
+    nl,
+    
+    write("sepparimpar"), nl,
     test_sepparimpar,
-    write('sepparimpar ok'), nl,
+    write('OK sepparimpar'), nl, nl,
 
+    write("todosrango"), nl,
     test_todosrango,
-    write('todosrango ok'), nl,
+    write('OK todosrango'), nl, nl,
 
+    write("rangomax"), nl,
     test_rangomax,
-    write('rangomax ok'), nl,
+    write('OK rangomax'), nl, nl,
 
+    write("chicograndechico"), nl,
     test_chicograndechico,
-    write('chicograndechico ok'), nl.
+    write('OK chicograndechico'), nl, nl.

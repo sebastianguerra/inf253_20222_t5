@@ -1,7 +1,12 @@
-% Debe implementar el predicado sepparimpar(L, P, I) tal que L, P e I sean
-% listas, y P contenga todos los elementos en las posiciones pares de L e I
-% todos los de las posiciones impares (Se consideran que las listas parten
-% desde 0).
+
+
+
+
+
+% sepparimpar(L, P, I): 
+%
+% Cierto si P contiene los elementos pares de la lista L e I los impares.
+
 sepparimpar([], [], []).
 
 sepparimpar([B], [B], []).
@@ -12,9 +17,11 @@ sepparimpar([A | LT], [A | PT], I) :- sepparimpar(LT, I, PT).
 
 
 
-% Debe implementar el predicado todosrango(L, Min, Max) tal que L sea una lista
-% que contenga todos los numeros enteros en el intervalo [Min, Max) (La lista
-% puede contener mas numeros).
+% todosrango(L, Min, Max):
+%
+% Cierto si L es una lista que contiene todos los numeros en el intervalo 
+% [Min, Max).
+
 todosrango(L, A, B) :-
     member(A, L), 
     (
@@ -26,11 +33,24 @@ todosrango(L, A, B) :-
 
 
 
-is_sorted(A) :- sort(A, A).
 
-% Debe implementar el predicado rangomax(L, Min, Max) tal que L sea una lista y
-% el intervalo [Min, Max) es el mas grande posible, para el cual se cumple que
-% todos los enteros en este se encuentren en la lista.
+
+% is_sorted(L):
+%
+% Cierto si L es una lista ordenada de menor a mayor.
+
+is_sorted(L) :- sort(L, L).
+
+
+
+
+
+% c_rangos_lista(L, R):
+%
+% Cierto si R es una lista que contiene la cantidad de enteros consecutivos
+% en la lista L.
+% Ej: Si L es [1,3,4,6,7,8] R es [1,2,3].
+
 c_rangos_lista([], []).
 
 c_rangos_lista([_], [1]).
@@ -57,6 +77,13 @@ c_rangos_lista([La, Lb | Lt], [Rh | Rt]) :-
 
 
 
+
+
+% rangomax(L, Min, Max):
+%
+% Cierto si Min y Max son el rango mas grande posible en L. Similar a 
+% todosrango/3 pero solo verifica el rango mas grande.
+
 rangomax(L, A, B) :- 
     todosrango(L, A, B), 
 
@@ -72,16 +99,23 @@ rangomax(L, A, B) :-
 
 
 
-% Debe implementar el predicado chicograndechico(L, Min, Max) tal que L es una
-% lista de largo Max-Min en donde todos sus elementos en posiciones pares estan
-% en el intervalo [Min, (Max+Min)/2] y todos sus elementos en posiciones
-% impares estan en el intervalo ((Max+min)/2, Max).
+% alllessthan(L, N):
+%
+% Cierto si todos los elementos de L son menores a N.
+
 alllessthan([], _).
 
 alllessthan([A | LT], B) :- 
     A < B, 
     alllessthan(LT, B).
 
+
+
+
+
+% allgreaterorequalthan(L, N):
+%
+% Cierto si todos los elementos de L son mayores o iguales que N.
 
 allgreaterorequalthan([], _).
 
@@ -91,6 +125,13 @@ allgreaterorequalthan([A | LT], B) :-
 
 
 
+
+
+% chicograndechico(L, Min, Max):
+%
+% Cierto si L es una lista de largo Max-Min en donde todos sus elementos
+% en posiciones pares estan en el intervalo [Min, (Max+Min)/2) y todos sus
+% elementos en posiciones impares estan en el intervalo [(Max+Min)/2, Max).
 
 chicograndechico(L, Min, Max) :-
     Len is Max-Min,
@@ -114,7 +155,9 @@ chicograndechico(L, Min, Max) :-
 
 
 
-
+% test_sepparimpar:
+%
+% Tests del predicado sepparimpar.
 test_sepparimpar :-
     sepparimpar([1, 5, 3, 2, 4, 6], P1, I1),
     P1 = [1, 3, 4], I1 = [5, 2, 6],
@@ -133,6 +176,9 @@ test_sepparimpar :-
     write("2 OK"), nl.
 
 
+% test_todosrango:
+%
+% Tests del predicado todosrango.
 test_todosrango :-
     todosrango([1, 5, 3, 2, 4, 6], 3, 7),
     write("1 OK"), nl,
@@ -163,6 +209,9 @@ test_todosrango :-
     write("5 OK"), nl.
 
 
+% test_rangomax:
+%
+% Tests del predicado rangomax.
 test_rangomax :-
     rangomax([1, 5, 3, 2, 4, 6], 1, 7),
     write("1 OK"), nl,
@@ -180,6 +229,9 @@ test_rangomax :-
     write("3 OK"), nl.
 
 
+% test_chicograndechico:
+%
+% Tests del predicado chicograndechico.
 test_chicograndechico :-
     findall(L1, chicograndechico(L1, 1, 5), L2),
     sort(L2, L3),
@@ -196,7 +248,9 @@ test_chicograndechico :-
     write("2 OK"), nl.
 
 
-
+% test:
+%
+% Ejecuta los tests de todos los predicados.
 test :- 
     nl,
 
